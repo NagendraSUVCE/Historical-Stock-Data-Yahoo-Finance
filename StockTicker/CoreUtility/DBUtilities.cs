@@ -77,7 +77,7 @@ namespace CoreUtility
                 Console.WriteLine("Bulk Insert completed table:" + dt.TableName);
                 
                 
-                +nn.Close();
+                conn.Close();
             }
 
             catch (Exception ex)
