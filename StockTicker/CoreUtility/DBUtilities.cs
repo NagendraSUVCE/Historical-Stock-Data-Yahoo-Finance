@@ -42,7 +42,7 @@ namespace CoreUtility
                     //Getting right data type for column is very importatnt as it can create problem later if wrong data type is chosen
                     //for mapping we are using below key value pair
                     Dictionary<string, string> typemappings = new Dictionary<string, string>();
-                    typemappings.Add("Decimal", "Numeric(12,2)");
+                    typemappings.Add("Decimal", "Numeric(18,6)");
                     typemappings.Add("String", "nvarchar(max) COLLATE Latin1_General_BIN");
                     typemappings.Add("Int32", "Int");
                     typemappings.Add("double", "Int");

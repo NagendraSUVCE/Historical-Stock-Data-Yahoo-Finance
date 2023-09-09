@@ -70,8 +70,16 @@ namespace StockRepository
         private DateTime GetLastUpdatedDBDate(string symbol)
         {
             DateTime lastDataUpdatedTime = new DateTime(2016, 01, 01);
+            object obj = null;
             string query = string.Format(@"SELECT MAX(StockDateTime) FROM StockHistoryYahoo WHERE StockTicker='{0}';", symbol);
-            var obj = DBUtilities.GetSingleValue(GetDBConnectionString(), query);
+            try
+            {
+
+                obj = DBUtilities.GetSingleValue(GetDBConnectionString(), query);
+            }
+            catch (Exception)
+            {
+            }
             if (obj != null && obj != DBNull.Value)
             {
                 lastDataUpdatedTime = (DateTime)obj;
