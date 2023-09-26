@@ -1,10 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/9abf5c7f-c83e-4dc7-a358-872dd8ad2af9/resourceGroups/githubnag/providers/microsoft.insights/components/StockTicker</ApplicationInsightsResourceId>
+    <UserSecretsId>ed6b1f3b-4559-4301-b46c-7e0fa61bbe0a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 

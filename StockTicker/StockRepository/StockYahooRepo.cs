@@ -16,6 +16,7 @@ namespace StockRepository
         {
             StringBuilder sb = new StringBuilder();
             string companyName = "";
+            List<Candle> lstCandle = new List<Candle>();
             List<StockHistoryYahoo> lstStockDetails = new List<StockHistoryYahoo>();
             try
             {
@@ -55,7 +56,7 @@ namespace StockRepository
                     DBUtilities.InsertDatatableToDatabase(dt);
                     return cndList;
                 }
-                return null;
+                return lstCandle;
             }
             catch (Exception ex)
             {
@@ -64,7 +65,7 @@ namespace StockRepository
 
                 throw ex;
             }
-            return null;
+            return lstCandle;
         }
 
         private DateTime GetLastUpdatedDBDate(string symbol)
