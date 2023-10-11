@@ -11,7 +11,7 @@ env:
   AZURE_APIM_SERVICENAME: StockTickerapi
   AZURE_APIM_API_ID: StockTickerAPIManagement
   AZURE_APIM_APPSERVICEURL: https://stocktickergithubnag.azurewebsites.net
-  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 5.6.3
+  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.5.0
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: .\publish\swagger.json
   API_IMPORT_DLL: .\bin\Release\net7.0\StockTicker.dll
