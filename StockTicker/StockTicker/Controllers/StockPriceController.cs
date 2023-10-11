@@ -58,5 +58,13 @@ namespace StockTicker.Controllers
             }
             return lstCandle;
         }
+
+        [Route("api/[controller]/UpdateMutualFundFromAMFI")]
+        [HttpGet]
+        public async Task UpdateMutualFundFromAMFI()
+        {
+            await (new MutualFundAMFIRepo()).UpdateMutualFundsDailyNAVFromAMFI();
+
+        }
     }
 }

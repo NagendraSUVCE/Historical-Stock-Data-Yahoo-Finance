@@ -113,5 +113,37 @@ namespace CoreUtility
             int o = cmd.ExecuteNonQuery();
             conn.Close();
         }
+
+        public static void DeleteTableFromDatabase(DataTable dt)
+        {
+            string tableName = dt.TableName;
+            if (tableName.ToLowerInvariant().StartsWith("table"))
+            {
+
+            }
+            else
+            {
+                SqlConnection conn = new SqlConnection(ConnectionString);
+                conn.Open();
+                //check if table is present or not
+                string exists = null;
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM sysobjects where name = '" + dt.TableName + "'", conn);
+                    cmd.CommandTimeout = CommandTimeOut;
+                    exists = cmd.ExecuteScalar().ToString();
+
+                    if (exists != null)
+                    {
+                        SqlCommand cmdDel = new SqlCommand("DROP TABLE [dbo].[" + dt.TableName + "]", conn);
+                        cmdDel.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception exce)
+                {
+                    exists = null;
+                }
+            }
+        }
     }
 }
