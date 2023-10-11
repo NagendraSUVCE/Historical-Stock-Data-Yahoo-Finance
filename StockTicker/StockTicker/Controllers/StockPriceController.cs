@@ -17,7 +17,7 @@ namespace StockTicker.Controllers
         //https://localhost:44327/api/StockPrice?symbol=MSFT
         //https://localhost:44327/api/StockPrice?symbol=INR=X
         StockYahooRepo stockRepo = new StockYahooRepo();
-        [Route("api/[controller]/GetGivenTicker")]
+        [Route("GetGivenTicker")]
         [HttpGet]
         public async Task<List<Candle>> Get(string symbol)
         {
@@ -33,7 +33,7 @@ namespace StockTicker.Controllers
         }
 
         //https://localhost:44327/api/StockPrice/api/StockPrice/GetAll
-        [Route("api/[controller]/GetAll")]
+        [Route("GetAll")]
         [HttpGet]
         public async Task<List<Candle>> UpdateDBAll()
         {
@@ -59,7 +59,7 @@ namespace StockTicker.Controllers
             return lstCandle;
         }
 
-        [Route("api/[controller]/UpdateMutualFundFromAMFI")]
+        [Route("UpdateMutualFundFromAMFI")]
         [HttpGet]
         public async Task UpdateMutualFundFromAMFI()
         {
