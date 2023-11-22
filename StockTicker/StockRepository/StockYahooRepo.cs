@@ -24,7 +24,7 @@ namespace StockRepository
                 startDate = startDate.Date.AddDays(1);
                 if (startDate < endDate)
                 {
-                    var historic_data = await Yahoo.GetHistoricalAsync(symbol, startDate, endDate);
+                    var historic_data = await Yahoo.GetHistoricalAsync(symbol, startDate, endDate, Period.Daily);
                     var security = await Yahoo.Symbols(symbol).Fields(Field.LongName).QueryAsync();
                     var ticker = security[symbol];
                     try

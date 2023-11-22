@@ -32,14 +32,14 @@ namespace StockTicker.Controllers
             return data;
         }
 
-        //https://localhost:44327/api/StockPrice/api/StockPrice/GetAll
+        //https://localhost:44327/api/StockPrice/GetAll
         [Route("GetAll")]
         [HttpGet]
         public async Task<List<Candle>> UpdateDBAll()
         {
             List<string> lstStockTickers = new List<string>();
-            lstStockTickers.Add("MSFT");
-            lstStockTickers.Add("INR=X");
+            // lstStockTickers.Add("MSFT");
+            // lstStockTickers.Add("INR=X");
             lstStockTickers.Add("ASIANPAINT.NS");
 
             List<Candle> lstCandle = new List<Candle>();
@@ -59,11 +59,14 @@ namespace StockTicker.Controllers
             return lstCandle;
         }
 
+        // https://localhost:44327/api/StockPrice/UpdateMutualFundFromAMFI
+        // https://stocktickergithubnag.azurewebsites.net/api/StockPrice/UpdateMutualFundFromAMFI
         [Route("UpdateMutualFundFromAMFI")]
         [HttpGet]
-        public async Task UpdateMutualFundFromAMFI()
+        public async Task<string> UpdateMutualFundFromAMFI()
         {
             await (new MutualFundAMFIRepo()).UpdateMutualFundsDailyNAVFromAMFI();
+            return "successfully completed UpdateMutualFundFromAMFI";
 
         }
     }
