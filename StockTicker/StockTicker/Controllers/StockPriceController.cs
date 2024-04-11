@@ -33,13 +33,14 @@ namespace StockTicker.Controllers
         }
 
         //https://localhost:44327/api/StockPrice/GetAll
+        // https://stocktickergithubnag.azurewebsites.net/api/StockPrice/GetAll
         [Route("GetAll")]
         [HttpGet]
         public async Task<List<Candle>> UpdateDBAll()
         {
             List<string> lstStockTickers = new List<string>();
-            // lstStockTickers.Add("MSFT");
-            // lstStockTickers.Add("INR=X");
+            lstStockTickers.Add("MSFT");
+            lstStockTickers.Add("INR=X");
             lstStockTickers.Add("ASIANPAINT.NS");
 
             List<Candle> lstCandle = new List<Candle>();
@@ -52,7 +53,7 @@ namespace StockTicker.Controllers
              */
             foreach (var symbol in lstStockTickers)
             {
-                var s= await stockRepo.getStockData(symbol, new DateTime(2016, 01, 01), DateTime.Now.Date.AddDays(-2));
+                var s = await stockRepo.getStockData(symbol, new DateTime(2016, 01, 01), DateTime.Now.Date.AddDays(-2));
                 lstCandle.AddRange(s);
 
             }
