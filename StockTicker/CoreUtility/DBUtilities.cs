@@ -145,5 +145,24 @@ namespace CoreUtility
                 }
             }
         }
+
+        public static DataSet ExecuteDataSet(string sqlText, string datasetName)
+        {
+            DataSet ds = null;
+            try
+            {// Assumes that connection is a valid SqlConnection object.
+                SqlDataAdapter adapter = new SqlDataAdapter(sqlText, ConnectionString);
+                adapter.SelectCommand.CommandTimeout = CommandTimeOut;
+                ds = new DataSet();
+                adapter.Fill(ds, datasetName);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return ds;
+        }
+
     }
 }
