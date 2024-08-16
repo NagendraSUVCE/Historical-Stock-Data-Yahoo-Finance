@@ -1,5 +1,6 @@
 ﻿using CoreUtility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ namespace StockTicker.Controllers
         [Route("GetPomradoDetails")]
         // https://localhost:44327/api/Pomrado/GetPomradoDetails
         // https://stocktickergithubnag.azurewebsites.net/api/Pomrado/GetPomradoDetails
-
+        [EnableCors("AllowAllOrigins")] // Enable CORS for this method
         public List<PomradoDetail> GetPomradoDetails()
         {
 
