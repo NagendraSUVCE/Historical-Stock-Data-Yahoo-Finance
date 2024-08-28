@@ -57,6 +57,8 @@ namespace StockTicker
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
 
             app.UseAuthorization();
             app.UseCors();
