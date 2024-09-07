@@ -7,16 +7,46 @@ using System;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
-
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Azure.Core;
 namespace StockTicker.Utility
 {
-    public class GraphFileUtility
+    public static class GraphFileUtility
     {
+        static SecretClient client = null;
+        static SecretClientOptions options = null;
+        public static string GraphFileUtilityGetSecret(string key)
+        {
+            if (options == null)
+            {
+                options = new SecretClientOptions()
+                {
+                    Retry =
+                        {
+                            Delay= TimeSpan.FromSeconds(2),
+                            MaxDelay = TimeSpan.FromSeconds(16),
+                            MaxRetries = 5,
+                            Mode = RetryMode.Exponential
+                         }
+                };
+            }
+            if (client == null)
+            {
+                client = new SecretClient(new Uri("https://nagkeyvault.vault.azure.net/"), new DefaultAzureCredential(), options);
+            }
+            KeyVaultSecret secret = client.GetSecret(key);
+
+            string secretValue = secret.Value;
+            return secretValue;
+        }
         public static GraphServiceClient GetGraphClientWithClientSecretCredential()
         {
-            string clientId = "";
-            string tenantId = "";
-            string clientSecret = "";
+            string clientId = GraphFileUtilityGetSecret("clientId");
+            string tenantId = GraphFileUtilityGetSecret("tenantId"); 
+            string clientSecret = GraphFileUtilityGetSecret("clientSecret"); 
             string[] scopes = { "https://graph.microsoft.com/.default" };
 
             var options = new TokenCredentialOptions

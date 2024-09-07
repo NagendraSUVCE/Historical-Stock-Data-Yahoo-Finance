@@ -58,19 +58,19 @@ namespace StockTicker.Controllers
         [EnableCors("AllowAllOrigins")] // Enable CORS for this method
         // https://stocktickergithubnag.azurewebsites.net/api/GraphExcel/GetExcelDataTableForCAMS
         // https://localhost:44327/api/GraphExcel/GetExcelDataTableForCAMS
-        public async Task GetExcelDataTableForCAMS(bool saveToDB = false)
+        public async Task<string> GetExcelDataTableForCAMS(bool saveToDB = false)
         {
             ExcelFileFromOneDrive excelFileFromOneDrive = new ExcelFileFromOneDrive();
             var d = await excelFileFromOneDrive.GetDataset();
             DataTable dtSaveToDB = d.Tables[0];
             if (saveToDB)
             {
-                DBUtilities.ConnectionString = "";
+                DBUtilities.ConnectionString = "Server=tcp:learningsqldb.database.windows.net,1433;Initial Catalog=Learning;Persist Security Info=False;User ID=nagendra;Password=AzureLearning#1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300;";
                 dtSaveToDB.TableName = "MFTransactionFromCAMS";
                 DBUtilities.DeleteTableFromDatabase(dtSaveToDB);
                 DBUtilities.InsertDatatableToDatabase(dtSaveToDB);
             }
-            // return dtSaveToDB;
+            return "Mutual fund saved successfully";
         }
     }
 
