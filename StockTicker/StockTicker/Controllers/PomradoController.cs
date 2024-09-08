@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using StockTicker.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -63,8 +64,7 @@ namespace StockTicker.Controllers
     {
         private string GetDBConnectionString()
         {
-            return "Server =tcp:learningsqldb.database.windows.net,1433;Initial Catalog=Learning;Persist Security Info=False;User ID=nagendra;Password=AzureLearning#1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300;";
-
+            return KeyVaultUtility.KeyVaultUtilityGetSecret("learningdbconnectionstring");
         }
         public List<PomradoDetail> GetPomradoDetails()
         {

@@ -60,17 +60,21 @@ namespace StockTicker.Controllers
         // https://localhost:44327/api/GraphExcel/GetExcelDataTableForCAMS
         public async Task<string> GetExcelDataTableForCAMS(bool saveToDB = false)
         {
+            string returnResult = "";
             ExcelFileFromOneDrive excelFileFromOneDrive = new ExcelFileFromOneDrive();
             var d = await excelFileFromOneDrive.GetDataset();
             DataTable dtSaveToDB = d.Tables[0];
+            returnResult = returnResult + " MF Transactions returned Successfully";
             if (saveToDB)
             {
-                DBUtilities.ConnectionString = "Server=tcp:learningsqldb.database.windows.net,1433;Initial Catalog=Learning;Persist Security Info=False;User ID=nagendra;Password=AzureLearning#1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300;";
+                string connectionString = KeyVaultUtility.KeyVaultUtilityGetSecret("learningdbconnectionstring");
+                DBUtilities.ConnectionString = connectionString;
                 dtSaveToDB.TableName = "MFTransactionFromCAMS";
                 DBUtilities.DeleteTableFromDatabase(dtSaveToDB);
                 DBUtilities.InsertDatatableToDatabase(dtSaveToDB);
+                returnResult = returnResult + " Saved To DB Successfully";
             }
-            return "Mutual fund saved successfully";
+            return returnResult;
         }
     }
 
