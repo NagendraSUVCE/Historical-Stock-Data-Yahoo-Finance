@@ -18,6 +18,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using StockTicker.Utility;
 using CoreUtility;
+using Utility.DS;
 
 namespace StockTicker.Controllers
 {
@@ -62,7 +63,7 @@ namespace StockTicker.Controllers
         {
             string returnResult = "";
             ExcelFileFromOneDrive excelFileFromOneDrive = new ExcelFileFromOneDrive();
-            var d = await excelFileFromOneDrive.GetDataset();
+            var d = await excelFileFromOneDrive.GetCAMSDataset();
             DataTable dtSaveToDB = d.Tables[0];
             returnResult = returnResult + " MF Transactions returned Successfully";
             if (saveToDB)
@@ -76,6 +77,35 @@ namespace StockTicker.Controllers
             }
             return returnResult;
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("GetExcelForPayslipsSummarized")]
+        [EnableCors("AllowAllOrigins")] // Enable CORS for this method
+        // https://stocktickergithubnag.azurewebsites.net/api/GraphExcel/GetExcelForPayslipsSummarized
+        // https://localhost:44327/api/GraphExcel/GetExcelForPayslipsSummarized
+        public async Task<List<MSFTSharesSummary>> GetExcelForPayslipsSummarized(bool saveToDB = false)
+        {
+            string returnResult = "";
+            ExcelFileFromOneDrive excelFileFromOneDrive = new ExcelFileFromOneDrive();
+            var d = await excelFileFromOneDrive.GetPayslipsSummarized();
+            DataTable specificWorkSheet = d.Tables["MSFTSharesSummary"];
+            specificWorkSheet.TableName = "MSFTSharesSummary";
+            List<MSFTSharesSummary> lstMSFTSharesSummary = DataSetUtilities.BindList<MSFTSharesSummary>(specificWorkSheet);
+            returnResult = returnResult + " MSFTSharesSummary returned Successfully";
+            if (saveToDB)
+            {
+                string connectionString = KeyVaultUtility.KeyVaultUtilityGetSecret("learningdbconnectionstring");
+                DBUtilities.ConnectionString = connectionString;
+               // dtSaveToDB.TableName = "MFTransactionFromCAMS";
+                // DBUtilities.DeleteTableFromDatabase(dtSaveToDB);
+                // DBUtilities.InsertDatatableToDatabase(dtSaveToDB);
+                returnResult = returnResult + " MSFTSharesSummary Saved To DB Successfully";
+            }
+            var top100 = lstMSFTSharesSummary.OrderByDescending(d => d.TxnDate).Take(100).ToList();
+
+            return top100;
+        }
     }
 
     // C:\Users\nagendrs\OneDrive - Krishna\Nagendra\all Salary\Mutual funds Demat Acc Share\MutualFunds CAMS\20240708_CAMSDetail.xls
@@ -83,7 +113,7 @@ namespace StockTicker.Controllers
 
     public class ExcelFileFromOneDrive
     {
-        public async Task<System.Data.DataSet> GetDataset()
+        public async Task<System.Data.DataSet> GetCAMSDataset()
         {
             var tempFilePath = "cams.xlsx";
             var fileName = "20240708_CAMSDetail.xls";
@@ -93,6 +123,24 @@ namespace StockTicker.Controllers
             {
                 await GraphFileUtility.CreateTemporaryFileInLocal(folderPath, fileName, tempFilePath);
                 ds = GraphFileUtility.GetDataFromExcelNewWay(tempFilePath);
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return ds;
+        }
+        public async Task<System.Data.DataSet> GetPayslipsSummarized()
+        {
+            var tempFilePath = "payslips.xlsx";
+            var fileName = "all Payslips Summarized.xlsx";
+            var folderPath = @"Nagendra/all Salary/all Payslips";
+            System.Data.DataSet ds = null;
+            try
+            {
+                await GraphFileUtility.CreateTemporaryFileInLocal(folderPath, fileName, tempFilePath);
+                ds = GraphFileUtility.GetDataFromExcelNewWayUseHeader(tempFilePath);
 
             }
             catch (Exception ex)
@@ -237,5 +285,18 @@ namespace StockTicker.Controllers
         public string activityName { get; set; }
         public string activityIndex { get; set; }
         public decimal Hrs { get; set; }
+    }
+
+    public class MSFTSharesSummary
+    {
+        public int EmpId { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public DateTime TxnDate { get; set; }
+        public decimal TxnAmt { get; set; }
+        public decimal FairMarketValue { get; set; }
+        public decimal SharesForTaxes { get; set; }
+        public decimal NetShares { get; set; }
+        public string SharesType { get; set; }
     }
 }
