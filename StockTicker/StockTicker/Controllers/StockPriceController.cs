@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using OoplesFinance.YahooFinanceAPI.Enums;
+using OoplesFinance.YahooFinanceAPI;
 using StockRepository;
 using System;
 using System.Collections.Generic;
@@ -39,9 +41,10 @@ namespace StockTicker.Controllers
         public async Task<List<Candle>> UpdateDBAll()
         {
             List<string> lstStockTickers = new List<string>();
-            lstStockTickers.Add("MSFT");
-            lstStockTickers.Add("INR=X");
-            lstStockTickers.Add("ASIANPAINT.NS");
+            // lstStockTickers.Add("MSFT");
+            // lstStockTickers.Add("INR=X");
+            // lstStockTickers.Add("ASIANPAINT.NS");
+            lstStockTickers.Add("^NSEI");
 
             List<Candle> lstCandle = new List<Candle>();
             //MSFT
@@ -58,6 +61,30 @@ namespace StockTicker.Controllers
 
             }
             return lstCandle;
+        }
+
+
+        //https://localhost:44327/api/StockPrice/GetAllUsingOoples
+        // https://stocktickergithubnag.azurewebsites.net/api/StockPrice/GetAllUsingOoples
+        [Route("GetAllUsingOoples")]
+        [HttpGet]
+        public async Task<List<Candle>> GetAllUsingOoples()
+        {
+            var startDate = DateTime.Now.AddYears(-1);
+            var symbol = "AAPL";
+            try
+            {
+
+                var yahooClient = new YahooClient();
+                var historicalDataList = await yahooClient.GetHistoricalDataAsync(symbol,
+                    DataFrequency.Daily, startDate, DateTime.Now.AddDays(-2));
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return null;
         }
 
         // https://localhost:44327/api/StockPrice/UpdateMutualFundFromAMFI
