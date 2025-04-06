@@ -20,6 +20,7 @@ namespace StockTicker.Controllers
         [AllowAnonymous]
         [Route("Ping")]
         // https://stocktickergithubnag.azurewebsites.net/api/Pomrado/Ping
+        // https://stockticker20250302085005.azurewebsites.net/api/Pomrado/Ping
         public string Ping()
         {
             return "Pomrado Connected";
